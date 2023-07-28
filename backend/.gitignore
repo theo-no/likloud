@@ -1,9 +1,17 @@
 HELP.md
 .gradle
+.html
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+application-db.yml
+application-jwt.yml
+application-oauth.yml
+
+upload-drawings
+upload-photos
 
 ### STS ###
 .apt_generated

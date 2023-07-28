@@ -1,4 +1,90 @@
 package com.backend.domain.member.service;
 
+import com.backend.domain.likes.entity.Likes;
+import com.backend.domain.likes.repository.LikesRepository;
+import com.backend.domain.member.entity.Member;
+import com.backend.domain.member.repository.MemberRepository;
+import com.backend.global.error.ErrorCode;
+import com.backend.global.error.exception.AuthenticationException;
+import com.backend.global.error.exception.BusinessException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
 public class MemberService {
+
+    private final MemberRepository memberRepository;
+    private final LikesRepository likesRepository;
+
+    public Member registerMember(Member member) {
+        validateDuplicateMember(member);
+        return memberRepository.save(member);
+    }
+
+    // 중복 검증
+    private void validateDuplicateMember(Member member) throws BusinessException {
+        Optional<Member> findMember = memberRepository.findByEmail(member.getEmail());
+        if(findMember.isPresent()){
+            throw new BusinessException(ErrorCode.ALREADY_REGISTERED_MEMBER);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findMemberByRefreshToken(String refreshToken) {
+        Member member = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new AuthenticationException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+        LocalDateTime tokenExpirationTime = member.getTokenExpirationTime();
+        if(tokenExpirationTime.isBefore(LocalDateTime.now())) {
+            throw new AuthenticationException(ErrorCode.REFRESH_TOKEN_EXPIRED);
+        }
+        return member;
+    }
+
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS));
+    }
+
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
+    }
+
+
+    public List<Likes> getLikesByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid memberId: " + memberId));
+        return member.getLikes();
+    }
+
+    public List<Likes> getDrawingsByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid memberId: " + memberId));
+        return member.getLikes();
+    }
+
+    public List<Likes> getBookmarkByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid memberId: " + memberId));
+        return member.getLikes();
+    }
+
+    public List<Likes> getPhotosByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid memberId: " + memberId));
+        return member.getLikes();
+    }
 }
