@@ -1,9 +1,14 @@
 HELP.md
 .gradle
+.html
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+
+upload-drawings
+upload-photos
 
 ### STS ###
 .apt_generated
