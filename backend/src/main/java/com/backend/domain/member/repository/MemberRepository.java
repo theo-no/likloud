@@ -1,4 +1,15 @@
 package com.backend.domain.member.repository;
 
-public interface MemberRepository {
+import com.backend.domain.member.constant.SocialType;
+import com.backend.domain.member.entity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByEmail(String email);
+    Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByRefreshToken(String refreshToken);
+    Optional<Member> findBySocialType(SocialType socialType);
+
 }
