@@ -1,6 +1,7 @@
 <div align="center">
 
-![](https://velog.velcdn.com/images/heeung/post/3c5b47fe-71ae-4d87-a46a-6a0bdf040005/image.png){: width="350" }
+<img src="https://velog.velcdn.com/images/heeung/post/3c5b47fe-71ae-4d87-a46a-6a0bdf040005/image.png" width="350px">
+
 
 ### ☁️ 구름위에 그림을 그려요, 뭉게뭉게 도화지 ☁️
 
